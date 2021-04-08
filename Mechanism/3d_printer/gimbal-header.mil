@@ -1,0 +1,21 @@
+ver 34
+Z:/hardware/let-there-be-light/Mechanism/3d_printer/gimbal-header.mil
+0
+resolution 1920 1080
+ZHeight 120
+XYpixelsize 65
+startinstancelist
+Z:/hardware/let-there-be-light/Mechanism/3d_printer/gimbal-header.stl
+0 0 5.75 0 0 0 1 1 1 0 0 0 0 0
+1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 
+beginsupports 8 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" 0.7125 -14.9715 -3.75 0.7125 -14.9715 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" -0.486505 -10.9105 -3.75 -0.486505 -10.9105 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" -14.6019 -0.703181 -3.75 -14.6019 -0.703181 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" -11.0877 -0.124232 -3.75 -11.0877 -0.124232 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" -1.99164 11.6724 -3.75 -1.99164 11.6724 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" 1.46615 13.051 -3.75 1.46615 13.051 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" 11.2061 -1.35739 -3.75 11.2061 -1.35739 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+"TOP_Cone 133%(auto)" "MID_Cone 133%(auto)" "BOTTOM_Circle" 13.6021 0.979687 -3.75 13.6021 0.979687 -5.75 1 0.25 0 0 1 0 0 -1 1 1 0.1 0 0.25 0.3325 1.5 1 0
+endsupports
+endinstancelist
