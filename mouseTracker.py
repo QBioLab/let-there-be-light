@@ -26,7 +26,7 @@ class mouseTracker:
         self.gimbal.park_gimbal()
         time.sleep(2)
 
-        self.camera = cv.VideoCapture(8)
+        self.camera = cv.VideoCapture(self.gimbal_addr)
         half_width = 370 / 2
         height = 220 / 200 * half_width * 2
         (x0, y0) = (95, -5)
@@ -75,10 +75,11 @@ class mouseTracker:
         self.gimbal.rotate_gimbal(gimbal_pitch, gimbal_yaw)
 
     def track_mouse(self):
-        while self.camera.isOpened() ^ ESC_flag:
+        while(True): #TODO: add stop marker
+            print("*", end="")
             ret, frame = self.camera.read()
             if not ret:
-                break
+                continue
             procession = frame[60: 430, 55: 425]
 
             #HSV 遮罩
@@ -132,7 +133,7 @@ class mouseTracker:
             last_centroid_xy =  [centroid_x, centroid_y]
             track_stack = np.r_[track_stack, last_centroid_xy]
             if time.time() - time_track >= 3600:
-                np.savetxt("track_2/{current_time}.csv".format(current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')), track_stack, delimiter = ',')
+                #np.savetxt("track_2/{current_time}.csv".format(current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')), track_stack, delimiter = ',')
                 time_track = time.time()
 
             #畫跟蹤點
@@ -152,5 +153,5 @@ class mouseTracker:
             self.gimbal.close()
 
 if __name__ == '__main__':
-    track1 = mouseTracker("/dev/ttyUSB0", 8, [60,430,55,425])
+    track1 = mouseTracker("/dev/ttyUSB4", 1, [60,430,55,425])
     track1.track_mouse()
