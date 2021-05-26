@@ -1,6 +1,7 @@
-from collections import namedtuple
+import sys
 import serial
 import struct
+from collections import namedtuple
 
 """
 v0.1 first version
@@ -24,7 +25,12 @@ Message = namedtuple(
 
 class gimbal:
     def __init__(self, PORT):
-        self.connection = serial.Serial(PORT, baudrate=115200, timeout=10)
+        try:
+            self.connection = serial.Serial(PORT, baudrate=115200, timeout=10)
+        except Exception as error:
+            print("Serial error, please check serial port")
+            print("Detail: ", error)
+            sys.exit()
 
     def pack_control_data(self, control_data: ControlData) -> bytes:
         return struct.pack('<BBBhhhhhh', *control_data)
@@ -72,14 +78,14 @@ class gimbal:
         CMD_CONTROL = 67
         control_data = ControlData(roll_mode=0, roll_speed=0, roll_angle=0,
                                pitch_mode=2, pitch_speed=32767, pitch_angle=pitch_angle,
-                               yaw_mode=2, yaw_speed=32767, yaw_angle=yaw_angle)
+                               yaw_mode=5, yaw_speed=32767, yaw_angle=yaw_angle)
         packed_control_data = self.pack_control_data(control_data)
         message = self.create_message(CMD_CONTROL, packed_control_data)
         packed_message = self.pack_message(message)
         self.connection.write(packed_message)
-        message = self.read_message(self.connection, 1)
-        print('received confirmation:', message)
-        print('confirmed command with ID:', ord(message.payload))
+        # message = self.read_message(self.connection, 1)
+        #print('received confirmation:', message)
+        # print('confirmed command with ID:', ord(message.payload))
 
     def rotate_gimbal_rel(self, pitch_angle, yaw_angle):
         CMD_CONTROL = 67
@@ -101,6 +107,35 @@ class gimbal:
         self.connection.write(packed_message)
         message = self.read_message(self.connection, 18) # 2*3*3
         return AngleData._make(struct.unpack('hhhhhhhhh', message.payload))
+
+    """Get Frame Heading Angle
+    |NUM_PARAMS 1u| PARAM_ID 1u|
+    Uints: 1 degrees
+    """
+    def get_frame_heading_angle(self):
+        CMD_GET_ADJ_VARS_VAL = 64
+        FRAME_HEADING_ANGLE = 37
+        message = self.create_message(CMD_GET_ADJ_VARS_VAL, 
+                struct.pack('BB', 1, FRAME_HEADING_ANGLE))
+        packed_message = self.pack_message(message)
+        self.connection.write(packed_message)
+        message = self.read_message(self.connection, 6) # 1u+1u+4b, 0.1 degrees
+        data = struct.unpack('BBbbbb', message.payload) # eg. (1, 37, -1, 127, 0 ,0)
+        return struct.unpack('BBbbbb', message.payload)
+        #return (data[2]*1000 + (data[2]/abs(data[2]))*data[3])*0.1
+
+    def set_frame_heading_angle(self, par1, par2, par3, par4):
+        CMD_SET_ADJ_VARS_VAL = 31
+        FRAME_HEADING_ANGLE = 37
+        message = self.create_message(CMD_SET_ADJ_VARS_VAL, 
+                struct.pack('BBbbbb', 1, FRAME_HEADING_ANGLE, par1, par2, par3, par4))
+        packed_message = self.pack_message(message)
+        self.connection.write(packed_message)
+        message = self.read_message(self.connection, 1) 
+        print('confirmed command with ID:', ord(message.payload))
+
+    def close(self):
+        self.connection.close()
 
 if __name__ == '__main__':
      gimbal_run = gimbal("/dev/ttyUSB0")
