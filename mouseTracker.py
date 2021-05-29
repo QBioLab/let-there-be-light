@@ -27,6 +27,7 @@ class mouseTracker:
         time.sleep(2)
 
         self.camera = cv.VideoCapture(self.gimbal_addr)
+        self.camera.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*"MJPG"))
         half_width = 370 / 2
         height = mm_height / 200 * half_width * 2
         (x0, y0) = (x0, y0)
