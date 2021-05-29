@@ -19,7 +19,7 @@ class mouseTracker:
     time_capture = time.time()
     track_stack = [0] * 2
 
-    def __init__(self, gimbal_addr, camera_addr, roi):
+    def __init__(self, gimbal_addr, camera_addr, roi, mm_height, x0, y0):
         self.gimbal_addr = gimbal_addr
         self.camera_addr = camera_addr
         self.gimbal = libgimbal.gimbal(gimbal_addr)
@@ -28,8 +28,8 @@ class mouseTracker:
 
         self.camera = cv.VideoCapture(self.gimbal_addr)
         half_width = 370 / 2
-        height = 220 / 200 * half_width * 2
-        (x0, y0) = (95, -5)
+        height = mm_height / 200 * half_width * 2
+        (x0, y0) = (x0, y0)
         self.roi = roi  #[x0, x1, y0, y1]
 
     def detecte_laser(frame):
@@ -80,7 +80,7 @@ class mouseTracker:
             ret, frame = self.camera.read()
             if not ret:
                 continue
-            procession = frame[60: 430, 55: 425]
+            procession = frame[roi[0]: roi[1], roi[2]: roi[3]]
 
             #HSV 遮罩
             hsv_frame = cv.cvtColor(procession, cv.COLOR_BGR2HSV)
@@ -155,3 +155,4 @@ class mouseTracker:
 if __name__ == '__main__':
     track1 = mouseTracker("/dev/ttyUSB4", 1, [60,430,55,425])
     track1.track_mouse()
+    track1.close()
