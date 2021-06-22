@@ -11,7 +11,6 @@ from PyQt5 import uic
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget 
 from PyQt5.QtCore import QFile, pyqtSlot, QTimer, Qt
-#from PyQt5.QtGui import QPixmap
 
 class fireball(QWidget):
     def __init__(self):
@@ -19,12 +18,11 @@ class fireball(QWidget):
         self.load_ui()
         self.current_box = 1
         self.timer_on = True
-        self.connect2slot()
-        self.box1 = None
+        self.all_box = [Box(1), Box(2), Box(3), Box(4)]
         self.display_width = 1200 #800*1.5
         self.display_height = 900 #600*1.5
-        self.tracker_on = False
-        timer = QTimer(self)
+        self.connect2slot()
+        timer = QTimer(self.image_label)
         timer.timeout.connect(self.update_image)
         timer.start(0)
 
@@ -44,41 +42,55 @@ class fireball(QWidget):
         uic.loadUi(ui_file, self)
         ui_file.close()
 
-    """Update checkbox button status"""
     @pyqtSlot()
     def update_status(self, id):
+        """Update checkbox button status"""
         self.current_box = id
         self.print2console("Switch to box %i"%self.current_box)
 
     @pyqtSlot()
     def start_track(self):
         """start tracking process on certain box"""
-        if self.current_box == 1:
-            #subprocess.Popen(['python3', f'{os.getcwd()}/camRecorder.py'])
-            self.box1 = multiprocessing.connection.Client(('localhost', 6003), authkey=b'cancer')
-            self.tracker_on = True
-        self.print2console("Start track on box %i"%self.current_box)
+        portmap = [6000, 6001, 6002, 6003]
+        camport = [0, 4, 6, 8]
+        uid = self.current_box - 1 
+        if not self.all_box[uid].on :
+            subprocess.Popen(['python3', f'{os.getcwd()}/camRecorder.py', \
+                str(camport[uid]), str(portmap[uid])])
+            time.sleep(1)
+            print(portmap[uid])
+            self.all_box[uid].cilent = multiprocessing.connection.Client(\
+                ('localhost', portmap[uid]), authkey=b'cancer')
+            self.all_box[uid].on= True
+            self.print2console("Start track on box %i"%(uid+1)
+        else:
+            self.print2console("Fail to start track on box %i, \
+                please try again"%(uid+1))
 
     @pyqtSlot()
     def stop_track(self):
-        """stop tracking process on certain box"""
-        self.box1.send(['close', 'Null'])
-        self.box1.close()
-        self.tracker_on = False
-        self.print2console("Stop track on box %i"%self.current_box)
+        """stop running track process"""
+        uid =  self.current_box - 1
+        if self.all_box[uid].on:
+            self.all_box[uid].cilent.send(['close', 'Null'])
+            self.all_box[uid].cilent.close()
+            self.all_box[uid].on = False
+            self.print2console("Stop track on box %i"%(uid+1))
+        else:
+            self.print2console("Tracking have not been executed in Box %i"%(uid+1))
 
     @pyqtSlot()
     def update_image(self):
         """update image_label with a new opencv image"""
-        if self.tracker_on :
+        uid = self.current_box - 1
+        if self.all_box[uid].on:
             self.image_label.setPixmap(self.get_image())
-
 
     def get_image(self):
         """revceive image and covert to QPixmap"""
-        self.box1.send(['live', 'Null'])
-        img = self.box1.recv()['image']
-        #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)#['image'][..., ::-1]
+        uid = self.current_box - 1
+        self.all_box[uid].cilent.send(['live', 'Null'])
+        img = self.all_box[uid].cilent.recv()['image']
         img = img[..., ::-1].copy()
         h, w, ch = img.shape
         bytes_per_line = ch * w
@@ -97,7 +109,6 @@ class fireball(QWidget):
             self.timer_on = False
             self.print2console("Turn off timer")
 
-
     """format output"""
     def print2console(self, text):
          timestamp = time.strftime("%m-%d %H:%M", time.localtime())
@@ -105,6 +116,12 @@ class fireball(QWidget):
          self.outputConsole.append(output)
          print(output)
 
+class Box:
+    """Information of tracker"""
+    def __init__(self, id):
+        self.uid = id
+        self.on = False
+        self.cilent = None
 
 if __name__ == "__main__":
     app = QApplication([])
