@@ -1,8 +1,8 @@
+#!/bin/python3
 # This Python file uses the following encoding: utf-8
 import sys
 import os
 import time
-#import cv2 
 import numpy as np
 import subprocess
 import multiprocessing.connection
@@ -18,13 +18,13 @@ class fireball(QWidget):
         self.load_ui()
         self.current_box = 1
         self.timer_on = True
-        self.all_box = [Box(1), Box(2), Box(3), Box(4)]
+        self.all_box = [Cage(1), Cage(2), Cage(3), Cage(4)]
         self.display_width = 1200 #800*1.5
-        self.display_height = 900 #600*1.5
+        self.display_height = 900 #600*1.5,, 370*3?
         self.connect2slot()
         timer = QTimer(self.image_label)
         timer.timeout.connect(self.update_image)
-        timer.start(0)
+        timer.start(2)
 
     def connect2slot(self):
         self.onTimer.toggled.connect(self.schedule)
@@ -53,16 +53,18 @@ class fireball(QWidget):
         """start tracking process on certain box"""
         portmap = [6000, 6001, 6002, 6003]
         camport = [0, 4, 6, 8]
+        config_files = ["cage1_config.json", "cage2_config.json", \
+                "cage3_config.json", "cage4_config.json"]
         uid = self.current_box - 1 
         if not self.all_box[uid].on :
-            subprocess.Popen(['python3', f'{os.getcwd()}/camRecorder.py', \
-                str(camport[uid]), str(portmap[uid])])
-            time.sleep(1)
-            print(portmap[uid])
+            subprocess.Popen(['python3', f'{os.getcwd()}/track2point.py', \
+                str(config_files[uid]), str(portmap[uid])])
+            time.sleep(2)
+            # TODO: check
             self.all_box[uid].cilent = multiprocessing.connection.Client(\
                 ('localhost', portmap[uid]), authkey=b'cancer')
             self.all_box[uid].on= True
-            self.print2console("Start track on box %i"%(uid+1)
+            self.print2console("Start track on box %i"%(uid+1))
         else:
             self.print2console("Fail to start track on box %i, \
                 please try again"%(uid+1))
@@ -77,7 +79,7 @@ class fireball(QWidget):
             self.all_box[uid].on = False
             self.print2console("Stop track on box %i"%(uid+1))
         else:
-            self.print2console("Tracking have not been executed in Box %i"%(uid+1))
+            self.print2console("Tracking have not been executed in Cage%i"%(uid+1))
 
     @pyqtSlot()
     def update_image(self):
@@ -90,7 +92,7 @@ class fireball(QWidget):
         """revceive image and covert to QPixmap"""
         uid = self.current_box - 1
         self.all_box[uid].cilent.send(['live', 'Null'])
-        img = self.all_box[uid].cilent.recv()['image']
+        img = self.all_box[uid].cilent.recv()#['image']
         img = img[..., ::-1].copy()
         h, w, ch = img.shape
         bytes_per_line = ch * w
@@ -116,7 +118,7 @@ class fireball(QWidget):
          self.outputConsole.append(output)
          print(output)
 
-class Box:
+class Cage:
     """Information of tracker"""
     def __init__(self, id):
         self.uid = id

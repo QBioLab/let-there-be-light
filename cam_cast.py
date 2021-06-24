@@ -3,6 +3,10 @@ import sys
 import cv2 as cv
 import multiprocessing.connection
 
+"""
+open camera in seprated process and send image by socket
+V0.1 hf 20210624
+"""
 
 class recorder:
     def __init__(self, cam_path):

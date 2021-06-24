@@ -1,0 +1,13 @@
+    {
+        "cam_idx": "0",
+        "roi_x0": 70,
+        "roi_x1": 440,
+        "roi_y0": 45,
+        "roi_y1": 415,
+        "gimbal_enable": false,
+        "gimbal_path": "/dev/ttyUSB0",
+        "gimbal_pos_x0": 75,
+        "gimbal_pos_y0": -5,
+        "gimbal_half_width": 185.0,
+        "gimbal_mm_height": 388.5
+    }

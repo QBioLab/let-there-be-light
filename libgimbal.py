@@ -108,11 +108,11 @@ class gimbal:
         message = self.read_message(self.connection, 18) # 2*3*3
         return AngleData._make(struct.unpack('hhhhhhhhh', message.payload))
 
-    """Get Frame Heading Angle
-    |NUM_PARAMS 1u| PARAM_ID 1u|
-    Uints: 1 degrees
-    """
     def get_frame_heading_angle(self):
+        """Get Frame Heading Angle
+        |NUM_PARAMS 1u| PARAM_ID 1u|
+        Uints: 1 degrees
+        """
         CMD_GET_ADJ_VARS_VAL = 64
         FRAME_HEADING_ANGLE = 37
         message = self.create_message(CMD_GET_ADJ_VARS_VAL, 
