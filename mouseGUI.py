@@ -25,7 +25,7 @@ class fireball(QWidget):
         self.load_ui()
         self.current_cage = 1
         self.scheduler_on = True
-        self.all_box = [Cage(1), Cage(2), Cage(3), Cage(4)]
+        self.all_cage = [Cage(1), Cage(2), Cage(3), Cage(4)]
         self.display_width = 1200 #800*1.5
         self.display_height = 900 #600*1.5,, 370*3?
         self.connect2slot()
@@ -66,14 +66,14 @@ class fireball(QWidget):
         config_files = ["cage1_config.json", "cage2_config.json", \
                 "cage3_config.json", "cage4_config.json"]
         uid = self.current_cage - 1 
-        if not self.all_box[uid].on :
+        if not self.all_cage[uid].on :
             subprocess.Popen(['python3', f'{os.getcwd()}/track2point.py', \
                 str(config_files[uid]), str(portmap[uid])])
             time.sleep(2)
             # TODO: check connection
-            self.all_box[uid].cilent = multiprocessing.connection.Client(\
+            self.all_cage[uid].cilent = multiprocessing.connection.Client(\
                 ('localhost', portmap[uid]), authkey=b'cancer')
-            self.all_box[uid].on= True
+            self.all_cage[uid].on= True
             self.print2console("Start track on box %i"%(uid+1))
         else:
             self.print2console("Fail to start track on box %i, \
@@ -83,10 +83,10 @@ class fireball(QWidget):
     def stop_track(self):
         """stop running track process"""
         uid =  self.current_cage - 1
-        if self.all_box[uid].on:
-            self.all_box[uid].cilent.send(['close', 'Null'])
-            self.all_box[uid].cilent.close()
-            self.all_box[uid].on = False
+        if self.all_cage[uid].on:
+            self.all_cage[uid].cilent.send(['close', 'Null'])
+            self.all_cage[uid].cilent.close()
+            self.all_cage[uid].on = False
             self.print2console("Stop track on box %i"%(uid+1))
         else:
             self.print2console("Tracking have not been executed in Cage%i"%(uid+1))
@@ -95,14 +95,14 @@ class fireball(QWidget):
     def update_image(self):
         """update image_label with a new opencv image"""
         uid = self.current_cage - 1
-        if self.all_box[uid].on:
+        if self.all_cage[uid].on:
             self.image_label.setPixmap(self.get_image())
 
     def get_image(self):
         """revceive image and covert to QPixmap"""
         uid = self.current_cage - 1
-        self.all_box[uid].cilent.send(['live', 'Null'])
-        img = self.all_box[uid].cilent.recv()#['image']
+        self.all_cage[uid].cilent.send(['live', 'Null'])
+        img = self.all_cage[uid].cilent.recv()#['image']
         img = img[..., ::-1].copy()
         h, w, ch = img.shape
         bytes_per_line = ch * w
@@ -129,9 +129,13 @@ class fireball(QWidget):
             # TODO: handle connection error
             if now == "08:00":
                 scheduler.on()
+                for cage in range(0, 4):
+                    self.all_cage[cage].cilent.send(['resume', 'Null'])
                 self.print2console("Turn on at %s"%now)
             if now == "20:00":
                 scheduler.off()
+                for cage in range(0, 4):
+                    self.all_cage[cage].cilent.send(['pause', 'Null'])
                 self.print2console("Turn on off %s"%now)
 
     @pyqtSlot()

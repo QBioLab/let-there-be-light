@@ -25,13 +25,10 @@ Message = namedtuple(
 
 class gimbal:
     def __init__(self, PORT):
-        try:
-            self.connection = serial.Serial(PORT, baudrate=115200, timeout=10)
-        except Exception as error:
-            print("Serial error, please check serial port")
-            print("Detail: ", error)
-            sys.exit()
-
+        self.PORT = PORT
+        self.connected = False
+        self.connect()
+        
     def pack_control_data(self, control_data: ControlData) -> bytes:
         return struct.pack('<BBBhhhhhh', *control_data)
 
@@ -134,8 +131,21 @@ class gimbal:
         message = self.read_message(self.connection, 1) 
         print('confirmed command with ID:', ord(message.payload))
 
-    def close(self):
-        self.connection.close()
+    def connect(self):
+        if self.connected == False:
+            try:
+                self.connection = serial.Serial(self.PORT, baudrate=115200, timeout=10)
+                self.connected = True
+            except Exception as error:
+                print("Serial error, please check serial port")
+                print("Detail: ", error)
+                sys.exit()
+
+    def disconnect(self):
+        if self.connected == True:
+            self.connection.close()
+            self.connected = False
+            print("Disconnect gimbal")
 
 if __name__ == '__main__':
      gimbal_run = gimbal("/dev/ttyUSB0")

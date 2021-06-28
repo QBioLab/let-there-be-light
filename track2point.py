@@ -112,6 +112,12 @@ if __name__=='__main__':
                         elif message[0] == 'close':
                             finder.close()
                             break
+                        elif message[0] == 'pause':
+                            print("stop gimbal, but keep camera open")
+                            light.disconnect()
+                        elif message[0] == 'resume':
+                            print("resume gimbal")
+                            light.connect()
                         else:
                             print("I don't know your command:", message[0])
                             #TODO: if lose connection, kill this process
