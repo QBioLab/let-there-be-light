@@ -155,8 +155,8 @@ class MouseTracker:
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
         width = self.roi[1] - self.roi[0]+1
         height = self.roi[3] - self.roi[2]+1
-        self.out = cv.VideoWriter(self.save_dir+"record-"+str(self.camera_addr)\
-            +record_time+".avi", fourcc, 1, (width, height), True)
+        self.out = cv.VideoWriter(self.save_dir+"/record-"+str(self.camera_addr)\
+            +"-"+record_time+".avi", fourcc, 1, (width, height), True)
 
     def save_data(self, image):
         """save image and centroid to file in period"""

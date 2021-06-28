@@ -94,7 +94,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <widget class="QCheckBox" name="onTimer">
+     <widget class="QCheckBox" name="schedulerON">
       <property name="text">
        <string>Timer</string>
       </property>

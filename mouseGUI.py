@@ -12,22 +12,32 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget 
 from PyQt5.QtCore import QFile, pyqtSlot, QTimer, Qt
 
+import scheduler
+
+"""
+GUI for tracking mouse
+v0.1 hf 20210628
+"""
+
 class fireball(QWidget):
     def __init__(self):
         super(fireball, self).__init__()
         self.load_ui()
         self.current_cage = 1
-        self.timer_on = True
+        self.scheduler_on = True
         self.all_box = [Cage(1), Cage(2), Cage(3), Cage(4)]
         self.display_width = 1200 #800*1.5
         self.display_height = 900 #600*1.5,, 370*3?
         self.connect2slot()
-        timer = QTimer(self.image_label)
-        timer.timeout.connect(self.update_image)
-        timer.start(2)
+        timer_image = QTimer(self.image_label)
+        timer_image.timeout.connect(self.update_image)
+        timer_image.start(2)
+        timer_scheduler = QTimer()
+        timer_scheduler.timeout.connect(self.run_scheduler)
+        timer_scheduler.start(1000)
 
     def connect2slot(self):
-        self.onTimer.toggled.connect(self.schedule)
+        self.schedulerON.toggled.connect(self.set_scheduler)
         self.onButton.clicked.connect(self.start_track)
         self.offButton.clicked.connect(self.stop_track)
         self.exitButton.clicked.connect(self.close)
@@ -53,7 +63,6 @@ class fireball(QWidget):
     def start_track(self):
         """start tracking process on certain box"""
         portmap = [6000, 6001, 6002, 6003]
-        camport = [0, 4, 6, 8]
         config_files = ["cage1_config.json", "cage2_config.json", \
                 "cage3_config.json", "cage4_config.json"]
         uid = self.current_cage - 1 
@@ -61,7 +70,7 @@ class fireball(QWidget):
             subprocess.Popen(['python3', f'{os.getcwd()}/track2point.py', \
                 str(config_files[uid]), str(portmap[uid])])
             time.sleep(2)
-            # TODO: check
+            # TODO: check connection
             self.all_box[uid].cilent = multiprocessing.connection.Client(\
                 ('localhost', portmap[uid]), authkey=b'cancer')
             self.all_box[uid].on= True
@@ -103,14 +112,27 @@ class fireball(QWidget):
         return QPixmap.fromImage(p)
 
     @pyqtSlot()
-    def schedule(self):
-        """schedule running time"""
-        if self.onTimer.isChecked():
-            self.timer_on = True
-            self.print2console("Turn on timer")
+    def set_scheduler(self):
+        """set and turn on/off schedule """
+        if self.schedulerON.isChecked():
+            self.scheduler_on = True
+            self.print2console("Turn on scheduler")
         else:
-            self.timer_on = False
-            self.print2console("Turn off timer")
+            self.scheduler_on = False
+            self.print2console("Turn off scheduler")
+
+    @pyqtSlot()
+    def run_scheduler(self):
+        """Run scheduler in QTimer"""
+        if self.scheduler_on:
+            now = time.strftime("%H:%M", time.localtime())
+            # TODO: handle connection error
+            if now == "08:00":
+                scheduler.on()
+                self.print2console("Turn on at %s"%now)
+            if now == "20:00":
+                scheduler.off()
+                self.print2console("Turn on off %s"%now)
 
     @pyqtSlot()
     def close(self):
