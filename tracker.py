@@ -20,18 +20,23 @@ class MouseTracker:
         self.camera_addr = camera_addr
         try:
             self.camera = cv.VideoCapture(self.camera_addr)
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         except Exception as error:
             print("Fail to open camera", self.camera_addr,":", error)
         # use MJPG to low cost of USB bandwidth 
-        self.camera.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*"MJPG"))
         # ref: https://github.com/opencv/opencv/issues/9540
-
+        self.camera.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+        self.camera.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+        fourcc = cv.VideoWriter_fourcc(*"MJPG")
+        self.camera.set(cv.CAP_PROP_FOURCC, fourcc)
+        # initialize video recorder
+        self.save_moive = False
+        self.save_dir = "/dev/null"
         self.roi = roi  #[x0, x1, y0, y1]
+                #result = open(self.save_dir+'/centroid-'+str(idx)+record_time+'.csv', 'w')
         self.centroid_y = self.centroid_x = 0
         self.last_centroid_y = self.last_centroid_x = 0
         self.count = 0
+        self.last_time= time.time()
 
     def detecte_laser(self, frame):
         blue_mask = cv.inRange(frame, (0, 0, 220), (255, 255, 255)) 
@@ -79,6 +84,7 @@ class MouseTracker:
         if not ret:
             return FAIL, None, None
         procession = frame[self.roi[0]: self.roi[1], self.roi[2]: self.roi[3]]
+        self.save_data(procession)
 
         #HSV 遮罩
         hsv_frame = cv.cvtColor(procession, cv.COLOR_BGR2HSV)
@@ -105,7 +111,7 @@ class MouseTracker:
             return LOST, None, procession
 
         #画轮廓
-        contour, hierarchy = cv.findContours(morphology, cv.RETR_CCOMP, \
+        contour, hierarchy = cv.findContours(morphology, cv.RETR_CCOMP,\
                 cv.CHAIN_APPROX_NONE)
         if len(contour) == 0:
             self.count = self.count + 1
@@ -142,12 +148,32 @@ class MouseTracker:
             return MOVE, [self.centroid_x, self.centroid_y], centroid_result
         return IGNO, None, centroid_result
 
+    def set_data_dir(self, dir):
+        record_time = time.strftime("%Y%m%d-%H%M", time.localtime())
+        self.save_moive = True
+        self.save_dir = dir
+        fourcc = cv.VideoWriter_fourcc(*"MJPG")
+        width = self.roi[1] - self.roi[0]+1
+        height = self.roi[3] - self.roi[2]+1
+        self.out = cv.VideoWriter(self.save_dir+"record-"+str(self.camera_addr)\
+            +record_time+".avi", fourcc, 1, (width, height), True)
+
+    def save_data(self, image):
+        """save image and centroid to file in period"""
+        if self.save_moive and time.time()-self.last_time > 60: # save image every 1min
+            self.last_time = time.time()
+            #self.out.write(cv.cvtColor(image, cv.COLOR_RGB2BGR))
+            self.out.write(image)
+            #result.write(centroid[0] centroid[1])
+
     def close(self):
         self.camera.release()
+        self.out.release()
         #print("release camera")
 
 if __name__ == '__main__':
-    tracker = MouseTracker("test/record-0.avi", [170, 520, 90, 510])
+    #tracker = MouseTracker("test/record-0.avi", [170, 520, 90, 510])
+    tracker = MouseTracker(0, [70, 440, 45, 415])
     ret = True
     while ret:
         ret, centroid, image = tracker.track_mouse()

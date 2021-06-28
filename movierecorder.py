@@ -7,9 +7,9 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(idx)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    out = cv2.VideoWriter("record-"+str(idx)+".avi", fourcc, 30.0, (640, 480), True)
+    cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+    out = cv2.VideoWriter("record-"+str(idx)+".avi", fourcc, 20.0, (640, 480), True)
 
     while val is True:
         ret, frame = cap.read()

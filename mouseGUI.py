@@ -16,7 +16,7 @@ class fireball(QWidget):
     def __init__(self):
         super(fireball, self).__init__()
         self.load_ui()
-        self.current_box = 1
+        self.current_cage = 1
         self.timer_on = True
         self.all_box = [Cage(1), Cage(2), Cage(3), Cage(4)]
         self.display_width = 1200 #800*1.5
@@ -30,6 +30,7 @@ class fireball(QWidget):
         self.onTimer.toggled.connect(self.schedule)
         self.onButton.clicked.connect(self.start_track)
         self.offButton.clicked.connect(self.stop_track)
+        self.exitButton.clicked.connect(self.close)
         self.boxButton_1.clicked.connect(lambda: self.update_status(1))
         self.boxButton_2.clicked.connect(lambda: self.update_status(2))
         self.boxButton_3.clicked.connect(lambda: self.update_status(3))
@@ -45,8 +46,8 @@ class fireball(QWidget):
     @pyqtSlot()
     def update_status(self, id):
         """Update checkbox button status"""
-        self.current_box = id
-        self.print2console("Switch to box %i"%self.current_box)
+        self.current_cage = id
+        self.print2console("Switch to box %i"%self.current_cage)
 
     @pyqtSlot()
     def start_track(self):
@@ -55,7 +56,7 @@ class fireball(QWidget):
         camport = [0, 4, 6, 8]
         config_files = ["cage1_config.json", "cage2_config.json", \
                 "cage3_config.json", "cage4_config.json"]
-        uid = self.current_box - 1 
+        uid = self.current_cage - 1 
         if not self.all_box[uid].on :
             subprocess.Popen(['python3', f'{os.getcwd()}/track2point.py', \
                 str(config_files[uid]), str(portmap[uid])])
@@ -72,7 +73,7 @@ class fireball(QWidget):
     @pyqtSlot()
     def stop_track(self):
         """stop running track process"""
-        uid =  self.current_box - 1
+        uid =  self.current_cage - 1
         if self.all_box[uid].on:
             self.all_box[uid].cilent.send(['close', 'Null'])
             self.all_box[uid].cilent.close()
@@ -84,13 +85,13 @@ class fireball(QWidget):
     @pyqtSlot()
     def update_image(self):
         """update image_label with a new opencv image"""
-        uid = self.current_box - 1
+        uid = self.current_cage - 1
         if self.all_box[uid].on:
             self.image_label.setPixmap(self.get_image())
 
     def get_image(self):
         """revceive image and covert to QPixmap"""
-        uid = self.current_box - 1
+        uid = self.current_cage - 1
         self.all_box[uid].cilent.send(['live', 'Null'])
         img = self.all_box[uid].cilent.recv()#['image']
         img = img[..., ::-1].copy()
@@ -101,9 +102,9 @@ class fireball(QWidget):
                 Qt.KeepAspectRatio)
         return QPixmap.fromImage(p)
 
-    """schedule running time"""
     @pyqtSlot()
     def schedule(self):
+        """schedule running time"""
         if self.onTimer.isChecked():
             self.timer_on = True
             self.print2console("Turn on timer")
@@ -111,12 +112,21 @@ class fireball(QWidget):
             self.timer_on = False
             self.print2console("Turn off timer")
 
-    """format output"""
+    @pyqtSlot()
+    def close(self):
+        """close GUI"""
+        self.print2console("Closing mouseGUI")
+        for cage in range(1, 5):
+            self.current_cage = cage
+            self.stop_track()
+        sys.exit(0)
+
     def print2console(self, text):
-         timestamp = time.strftime("%m-%d %H:%M", time.localtime())
-         output = timestamp +": "+text
-         self.outputConsole.append(output)
-         print(output)
+        """format output"""
+        timestamp = time.strftime("%m-%d %H:%M", time.localtime())
+        output = timestamp +": "+text
+        self.outputConsole.append(output)
+        print(output)
 
 class Cage:
     """Information of tracker"""
@@ -128,5 +138,6 @@ class Cage:
 if __name__ == "__main__":
     app = QApplication([])
     widget = fireball()
+    widget.showFullScreen()
     widget.show()
     sys.exit(app.exec_())

@@ -4,10 +4,11 @@
         "roi_x1": 430,
         "roi_y0": 55,
         "roi_y1": 425,
-        "gimbal_enable": false,
+        "gimbal_enable": true,
         "gimbal_path": "/dev/ttyUSB1",
         "gimbal_pos_x0": 90,
         "gimbal_pos_y0": 0,
         "gimbal_half_width": 185,
-        "gimbal_mm_height": 351.5
+        "gimbal_mm_height": 351.5,
+	    "log_dir": "/datahub/let-there-be-light/log"
     }

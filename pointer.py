@@ -4,7 +4,7 @@ from libgimbal import gimbal
 
 class Pointer(gimbal):
     def __init__(self, PORT):
-        super(libgimbal, self).__init__(PORT)
+        super().__init__(PORT)
         self.park_gimbal()
         #云台中心的笼底投影
         self.x0 = 0

@@ -2,7 +2,8 @@
 Track and light mouse
 
 ## Control and Computing Unit with Khadas 控制和运算单元
-Target: remote control, graph interface
+Expectation: remote controllable and editable, graph interface, error handle
+
 
 Khadas VIM3 don't shop the kernel with usbtmc and i2c mux driver, so I
 [rebuild kernel](https://docs.khadas.com/vim3/HowToUpgradeTheKernel.html)
