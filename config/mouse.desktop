@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=mouse
+Comment=GUI for tracking mouse 
+Exec=/home/khadas/let-there-be-light/run.sh
+Icon=
+Type=Application
+# cat /usr/share/xsessions/mouse.desktop
+# ref: https://askubuntu.com/questions/889725/how-can-i-run-my-gui-application-without-desktop-enviroment-and-make-it-fullscre 
