@@ -26,6 +26,7 @@ class MouseTracker:
         # ref: https://github.com/opencv/opencv/issues/9540
         self.camera.set(cv.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+        #cam.set(cv.CAP_PROP_AUTO_WB, 0)
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
         self.camera.set(cv.CAP_PROP_FOURCC, fourcc)
         # initialize video recorder

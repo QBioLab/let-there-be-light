@@ -81,7 +81,7 @@ if __name__=='__main__':
         while True:
             ret, pos, image = finder.track_mouse()
             if ret == MOVE and config['gimbal_enable']:
-                light.point2mouse(pos[0], pos[0])
+                light.point2mouse(pos[0], pos[1])
                 print("Found at", pos[0], pos[1])
     elif port == "disp":
         print("Entering cli with integrated mode")
@@ -108,6 +108,8 @@ if __name__=='__main__':
                     ret, pos, image = finder.track_mouse()
                     if ret == MOVE and config['gimbal_enable']:
                         light.point2mouse(pos[0], pos[1])
+                    elif ret == PARK and config['gimbal_enable']:
+                        light.park_gimbal()
                     if receiver.poll(timeout = 0.003): # blocking or non-blocking
                         message = receiver.recv()
                         argument = message[1]
