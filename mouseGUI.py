@@ -32,9 +32,10 @@ class fireball(QWidget):
         timer_image = QTimer(self.image_label)
         timer_image.timeout.connect(self.update_image)
         timer_image.start(2)
-        timer_scheduler = QTimer()
+        timer_scheduler = QTimer(self)
         timer_scheduler.timeout.connect(self.run_scheduler)
-        timer_scheduler.start(1000)
+        timer_scheduler.start(30000)
+        self.power_on = False
 
     def connect2slot(self):
         self.schedulerON.toggled.connect(self.set_scheduler)
@@ -73,7 +74,8 @@ class fireball(QWidget):
             # TODO: check connection
             self.all_cage[uid].cilent = multiprocessing.connection.Client(\
                 ('localhost', portmap[uid]), authkey=b'cancer')
-            self.all_cage[uid].on= True
+            self.all_cage[uid].on = True
+            self.all_cage[uid].gimbal_on = True # TODO: get from return information
             self.print2console("Start track on box %i"%(uid+1))
         else:
             self.print2console("Fail to start track on box %i, \
@@ -127,15 +129,19 @@ class fireball(QWidget):
         if self.scheduler_on:
             now = time.strftime("%H:%M", time.localtime())
             # TODO: handle connection error
-            if now == "08:00":
+            if now == "08:00" and self.power_on == False:
                 scheduler.on()
-                for cage in range(0, 4):
-                    self.all_cage[cage].cilent.send(['resume', 'Null'])
+                self.power_on = True
+                #for cage in range(0, 4) :
+                #    if self.all_cage[cage].on :
+                #        self.all_cage[cage].cilent.send(['resume', 'Null'])
                 self.print2console("Turn on at %s"%now)
-            if now == "20:00":
+            if now == "20:00" and self.power_on == True:
                 scheduler.off()
-                for cage in range(0, 4):
-                    self.all_cage[cage].cilent.send(['pause', 'Null'])
+                self.power_on = False
+                #for cage in range(0, 4):
+                #    if self.all_cage[cage].on :
+                #        self.all_cage[cage].cilent.send(['pause', 'Null'])
                 self.print2console("Turn on off %s"%now)
 
     @pyqtSlot()
@@ -160,10 +166,13 @@ class Cage:
         self.uid = id
         self.on = False
         self.cilent = None
+        self.gimbal_on = False
 
 if __name__ == "__main__":
     app = QApplication([])
     widget = fireball()
-    widget.showFullScreen()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-full' :
+            widget.showFullScreen()
     widget.show()
     sys.exit(app.exec_())

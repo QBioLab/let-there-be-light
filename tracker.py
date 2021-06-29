@@ -33,6 +33,7 @@ class MouseTracker:
         self.save_dir = "/dev/null"
         self.roi = roi  #[x0, x1, y0, y1]
                 #result = open(self.save_dir+'/centroid-'+str(idx)+record_time+'.csv', 'w')
+        self.erode1 = 5
         self.centroid_y = self.centroid_x = 0
         self.last_centroid_y = self.last_centroid_x = 0
         self.count = 0
@@ -59,7 +60,6 @@ class MouseTracker:
     def set_mask_red(self):
         """Set mask parameters"""
         print("Set HSV filter parameters")
-
     
     def mask_red_bgr(self, procession):
         """BGR 遮罩"""
@@ -68,9 +68,13 @@ class MouseTracker:
         mask_red_bgr = cv.inRange(procession, lower_bgr, upper_bgr)
         return mask_red_bgr
 
+    def set_erode1(self, erode1):
+        self.erode1 = erode1
+
     def morphology_process(self, mask, erode1):
         """形态学处理"""
-        morphology = cv.erode(mask, cv.getStructuringElement(cv.MORPH_ELLIPSE, (erode1, erode1)))
+        morphology = cv.erode(mask, cv.getStructuringElement(cv.MORPH_ELLIPSE, \
+                (self.erode1, self.erode1)))
         morphology = cv.dilate(morphology, cv.getStructuringElement(cv.MORPH_ELLIPSE, (30, 30)))
         morphology = cv.erode(morphology, cv.getStructuringElement(cv.MORPH_ELLIPSE, (20, 20)))
         morphology = cv.dilate(morphology, cv.getStructuringElement(cv.MORPH_ELLIPSE, (10, 10)))
@@ -100,7 +104,7 @@ class MouseTracker:
             return LOST, None, procession
 
         #形态学处理
-        morphology = self.morphology_process(mask, 5)
+        morphology = self.morphology_process(mask, self.erode1)
         if np.all(morphology == 0):
             self.count = self.count + 1
             print('morphology = None', self.count)
@@ -153,10 +157,10 @@ class MouseTracker:
         self.save_moive = True
         self.save_dir = dir
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
-        width = self.roi[1] - self.roi[0]+1
-        height = self.roi[3] - self.roi[2]+1
+        width = self.roi[1] - self.roi[0]
+        height = self.roi[3] - self.roi[2]
         self.out = cv.VideoWriter(self.save_dir+"/record-"+str(self.camera_addr)\
-            +"-"+record_time+".avi", fourcc, 1, (width, height), True)
+            +"-"+record_time+".avi", fourcc, 1, (width, height))
 
     def save_data(self, image):
         """save image and centroid to file in period"""

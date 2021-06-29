@@ -21,6 +21,7 @@ system will reboot.
 TODO: assign fixed camera path to specifical usb port. Device info could get
 from `udevadm info -a -p  $(udevadm info -q path -n /dev/video0)`
 
+TODO: organise output information
 
 Build GUI in QT. How to communicate multi devices and processes. Select camera with tab windows.
 

@@ -35,6 +35,8 @@ gimbal_pos_x0 = 75
 gimbal_pos_y0 = -5
 gimbal_half_width = 370/2
 gimbal_mm_height = 210 / 200 * gimbal_half_width * 2
+yaw_bias = 0
+erode1 = 5
 log_dir = "/dev/null"
 # TODO: change to unix domain socket for better performance
 
@@ -46,7 +48,8 @@ def init_config():
             'roi_y1':roi_y1, 'gimbal_enable':gimbal_enable, 'gimbal_path':gimbal_path, \
             'gimbal_path':gimbal_path, 'gimbal_pos_x0':gimbal_pos_x0, \
             'gimbal_pos_y0':gimbal_pos_y0, 'gimbal_half_width':gimbal_half_width, \
-            'gimbal_mm_height':gimbal_mm_height, 'log_dir':log_dir}
+            'gimbal_mm_height':gimbal_mm_height, 'log_dir':log_dir, 'yaw_bias':yaw_bias,\
+            'erode1':5}
         with open('config.json', 'w') as config_file:
             json.dump(config, config_file, indent=4)
         return port, config
@@ -67,11 +70,12 @@ if __name__=='__main__':
     port, config = init_config()
     finder = tracker.MouseTracker(config['cam_idx'], [config[i] for i in \
             ['roi_x0', 'roi_x1', 'roi_y0', 'roi_y1']])
-    finder.set_data_dir(config["log_dir"])
+    finder.set_data_dir(config['log_dir'])
+    finder.set_erode1(config['erode1'])
     if config['gimbal_enable']:
         light = pointer.Pointer(config['gimbal_path'])
-        light.set_pointer_pos(config['gimbal_pos_x0'], config['gimbal_pos_y0'], \
-            config['gimbal_half_width'], config['gimbal_mm_height'])
+        light.set_pointer(config['gimbal_pos_x0'], config['gimbal_pos_y0'], \
+            config['gimbal_half_width'], config['gimbal_mm_height'], config['yaw_bias'])
     if port == "": #TODO: add integrated interface mode
         print("Entering cli-only mode")
         while True:
