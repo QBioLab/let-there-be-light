@@ -35,7 +35,7 @@ class fireball(QWidget):
         timer_scheduler = QTimer(self)
         timer_scheduler.timeout.connect(self.run_scheduler)
         timer_scheduler.start(30000)
-        self.power_on = False
+        self.__done= False
 
     def connect2slot(self):
         self.schedulerON.toggled.connect(self.set_scheduler)
@@ -76,9 +76,9 @@ class fireball(QWidget):
                 ('localhost', portmap[uid]), authkey=b'cancer')
             self.all_cage[uid].on = True
             self.all_cage[uid].gimbal_on = True # TODO: get from return information
-            self.print2console("Start track on box %i"%(uid+1))
+            self.print2console("Start track on cage %i"%(uid+1))
         else:
-            self.print2console("Fail to start track on box %i, \
+            self.print2console("Fail to start track on cage%i, \
                 please try again"%(uid+1))
 
     @pyqtSlot()
@@ -129,20 +129,23 @@ class fireball(QWidget):
         if self.scheduler_on:
             now = time.strftime("%H:%M", time.localtime())
             # TODO: handle connection error
-            if now == "08:00" and self.power_on == False:
+            # TODO: update clock setting from GUI
+            if now == "08:00" and self.__done == False:
                 scheduler.on()
-                self.power_on = True
-                #for cage in range(0, 4) :
-                #    if self.all_cage[cage].on :
-                #        self.all_cage[cage].cilent.send(['resume', 'Null'])
+                for cage in range(1, 5):
+                    self.current_cage = cage
+                    self.start_track()
                 self.print2console("Turn on at %s"%now)
-            if now == "20:00" and self.power_on == True:
+                self.__done = True
+            elif now == "20:00" and self.__done == False:
                 scheduler.off()
-                self.power_on = False
-                #for cage in range(0, 4):
-                #    if self.all_cage[cage].on :
-                #        self.all_cage[cage].cilent.send(['pause', 'Null'])
+                for cage in range(1, 5):
+                    self.current_cage = cage
+                    self.stop_track()
                 self.print2console("Turn on off %s"%now)
+                self.__done = True
+            else:
+                self.__done = False
 
     @pyqtSlot()
     def close(self):
