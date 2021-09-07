@@ -2,8 +2,7 @@
 Track and light mouse
 
 ## Control and Computing Unit with Khadas 控制和运算单元
-Expectation: remote controllable and editable, graph interface, error handle
-
+Target: enable to remote controll, graph interface, error handle
 
 Khadas VIM3 don't shop the kernel with usbtmc and i2c mux driver, so I
 [rebuild kernel](https://docs.khadas.com/vim3/HowToUpgradeTheKernel.html)
@@ -21,26 +20,26 @@ system will reboot.
 TODO: assign fixed camera path to specifical usb port. Device info could get
 from `udevadm info -a -p  $(udevadm info -q path -n /dev/video0)`
 
-TODO: organise output information
+TODO: organize output information
+TODO: send command to power supply then release and return.
 
-Build GUI in QT. How to communicate multi devices and processes. Select camera with tab windows.
+Build GUI in QT. 
 
-1. [Framebuffer vncserver](https://github.com/ponty/framebuffer-vncserver)
-2. [Set QT5 in Khadas VIM](https://docs.khadas.com/zh-cn/vim3/QT5Usage.html)
-3. [PyQtGraph library](https://github.com/pyqtgraph/pyqtgraph)
-4. [Assign fixed usb port name](https://www.freva.com/2019/06/20/assign-fixed-usb-port-names-to-your-raspberry-pi/)
-5. [How to bind v4l2 USB cameras to the same device names even after reboot?](https://unix.stackexchange.com/questions/77170/how-to-bind-v4l2-usb-cameras-to-the-same-device-names-even-after-reboot)
-6. [Convert M.2 to PCI-e in VIM3](https://forum.khadas.com/t/pci-e-card-power-supply/12122)
-7. [WiringPi-Python on VIM](https://docs.khadas.com/zh-cn/vim3/HowToUseWiringPi-Python.html)
-8. [Change Logo](https://docs.khadas.com/zh-cn/vim3/HowToChangeBootLogo.html)
-9. [Autostart login tty1 and execute command](https://unix.stackexchange.com/questions/44288/run-gui-application-on-startup)
+- [PyQtGraph library](https://github.com/pyqtgraph/pyqtgraph)
+- [Assign fixed usb port name](https://www.freva.com/2019/06/20/assign-fixed-usb-port-names-to-your-raspberry-pi/)
+- [How to bind v4l2 USB cameras to the same device names even after reboot?](https://unix.stackexchange.com/questions/77170/how-to-bind-v4l2-usb-cameras-to-the-same-device-names-even-after-reboot)
+- [Convert M.2 to PCI-e in VIM3](https://forum.khadas.com/t/pci-e-card-power-supply/12122)
+- [WiringPi-Python on VIM](https://docs.khadas.com/zh-cn/vim3/HowToUseWiringPi-Python.html)
+- [Change Logo](https://docs.khadas.com/zh-cn/vim3/HowToChangeBootLogo.html)
+- [Autostart login tty1 and execute command](https://unix.stackexchange.com/questions/44288/run-gui-application-on-startup)
+
 
 ## Gimbal design and setting 云台设计
-
 Before run SimpleBGC in khadas, please install `librxtx-java`
 
-## ISSUSE 现存问题
-1. Gry drift
+
+## ISSUSE & TODO 现存问题
+1. Yaw drift: Auto find gimbal yaw and pitch origin using camera
 
 ## Ref 参考
 https://superuser.com/questions/497933/50-usb-webcams-in-a-single-computer-is-that-really-possible

@@ -1,6 +1,7 @@
 #!/bin/python3
 import sys
 import json
+import time
 import pointer
 import tracker
 import multiprocessing.connection
@@ -95,6 +96,7 @@ if __name__=='__main__':
                 light.point2mouse(pos[0], pos[1])
             if cv.waitKey(1) == 27:
                 break
+            time.sleep(0.3)
         finder.close()
         cv.destroyAllWindows()
 

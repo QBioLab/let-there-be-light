@@ -22,6 +22,8 @@ Message = namedtuple(
     'start_character command_id payload_size header_checksum \
     payload payload_checksum')
 
+MOTOR_UNIT = 0.02197265625 # 720/32768
+
 
 class gimbal:
     def __init__(self, PORT):
@@ -71,11 +73,20 @@ class gimbal:
         message = self.read_message(self.connection, 1)
         #print('received confirmation:', message)
 
+    def cal_motor_angle(self, angle):
+        motor_angle = int(angle/MOTOR_UNIT)
+        return motor_angle
+
     def rotate_gimbal(self, pitch_angle, yaw_angle):
+        pitch_motor_angle = self.cal_motor_angle(pitch_angle)
+        yaw_motor_angle = self.cal_motor_angle(yaw_angle)
+        self.rotate_gimbal_in_motor_angle(pitch_motor_angle, yaw_motor_angle)
+
+    def rotate_gimbal_in_motor_angle(self, pitch_motor_angle, yaw_motor_angle):
         CMD_CONTROL = 67
         control_data = ControlData(roll_mode=0, roll_speed=0, roll_angle=0,
-                               pitch_mode=2, pitch_speed=32767, pitch_angle=pitch_angle,
-                               yaw_mode=5, yaw_speed=32767, yaw_angle=yaw_angle)
+                               pitch_mode=2, pitch_speed=32767, pitch_angle=pitch_motor_angle,
+                               yaw_mode=5, yaw_speed=32767, yaw_angle=yaw_motor_angle)
         packed_control_data = self.pack_control_data(control_data)
         message = self.create_message(CMD_CONTROL, packed_control_data)
         packed_message = self.pack_message(message)
@@ -149,4 +160,4 @@ class gimbal:
 
 if __name__ == '__main__':
      gimbal_run = gimbal("/dev/ttyUSB0")
-     gimbal.park_gimbal()
+     gimbal_run.park_gimbal()
