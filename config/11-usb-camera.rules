@@ -1,0 +1,4 @@
+SUBSYSTEM=="video4linux", ATTRS{busnum}=="1", ATTRS{devpath}=="1", SYMLINK+="video23"
+SUBSYSTEM=="video4linux", ATTRS{busnum}=="1", ATTRS{devpath}=="2", SYMLINK+="video24"
+SUBSYSTEM=="video4linux", ATTRS{busnum}=="1", ATTRS{devpath}=="3", SYMLINK+="video21"
+SUBSYSTEM=="video4linux", ATTRS{busnum}=="1", ATTRS{devpath}=="4", SYMLINK+="video22"

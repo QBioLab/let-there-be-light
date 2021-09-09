@@ -1,0 +1,4 @@
+SUBSYSTEM=="tty", ATTRS{busnum}=="3", ATTRS{devpath}=="1.2.1", SYMLINK+="ttyGIMBAL2"
+SUBSYSTEM=="tty", ATTRS{busnum}=="3", ATTRS{devpath}=="1.2.2", SYMLINK+="ttyGIMBAL3"
+SUBSYSTEM=="tty", ATTRS{busnum}=="3", ATTRS{devpath}=="1.2.3", SYMLINK+="ttyGIMBAL4"
+SUBSYSTEM=="tty", ATTRS{busnum}=="3", ATTRS{devpath}=="1.2.4", SYMLINK+="ttyGIMBAL1"
