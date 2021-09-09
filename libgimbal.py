@@ -60,18 +60,7 @@ class gimbal:
         return self.unpack_message(response_data, payload_size)
 
     def park_gimbal(self):
-        CMD_CONTROL = 67
-        control_data = ControlData(roll_mode=0, roll_speed=0, roll_angle=0,
-                               pitch_mode=2, pitch_speed=32767, pitch_angle=4096,
-                               yaw_mode=2, yaw_speed=32767, yaw_angle=0)
-        #print('command to send:', control_data)
-        packed_control_data = self.pack_control_data(control_data)
-        #print('packed command as payload:', packed_control_data)
-        message = self.create_message(CMD_CONTROL, packed_control_data)
-        packed_message = self.pack_message(message)
-        self.connection.write(packed_message)
-        message = self.read_message(self.connection, 1)
-        #print('received confirmation:', message)
+        self.rotate_gimbal(70, 0)
 
     def cal_motor_angle(self, angle):
         motor_angle = int(angle/MOTOR_UNIT)
@@ -159,5 +148,8 @@ class gimbal:
             print("Disconnect gimbal")
 
 if __name__ == '__main__':
-     gimbal_run = gimbal("/dev/ttyUSB0")
-     gimbal_run.park_gimbal()
+    gimbal_serial_name = "/dev/ttyGIMBAL1"
+    if len(sys.argv) == 2 :
+        gimbal_serial_name = sys.argv[1]
+    gimbal_run = gimbal(gimbal_serial_name)
+    gimbal_run.park_gimbal()
