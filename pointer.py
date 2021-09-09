@@ -23,6 +23,7 @@ class Pointer(gimbal):
     def point2mouse(self, centroid_x, centroid_y):
         """雲臺指向"""
         # calculate mouse position respect to gimbal
+        #   -> y  /|\ x
         mouse_x = centroid_x - self.half_width + self.x0
         mouse_y = centroid_y - self.half_width + self.y0
         gimbal_pitch = self._xy2pitch_angle(mouse_x, mouse_y) 
@@ -36,17 +37,21 @@ class Pointer(gimbal):
         min_angle = 40
         central_angle = 90
         # 取余角
-        pitch_angle = 90 - np.arctan2(np.sign(y)*np.sqrt(x**2 + y**2), self.height)/np.pi*180
+        pitch_angle = 90 - np.arctan2(np.sign(x)*np.sqrt(x**2 + y**2), self.height)/np.pi*180
         if pitch_angle > max_angle or pitch_angle < min_angle :
             pitch_angle  = central_angle
         return pitch_angle
 
     def _xy2yaw_angle(self, x, y):
         # yaw axis walk in 0-180 degree
-        yaw_angle = np.arctan2(np.abs(y), np.abs(x)) / np.pi*180 + self.yaw_bias
-        if not np.sign(y) == np.sign(x):
-            # 取补角
-            yaw_angle = 180 - yaw_angle
+        max_angle = 100 
+        min_angle = -100
+        yaw_angle = np.sign(x)*np.arctan2(y, np.abs(x)) / np.pi*180 
+        yaw_angle = yaw_angle + self.yaw_bias
+        if yaw_angle > max_angle :
+            yaw_angle = max_angle
+        if  yaw_angle < min_angle:
+            yaw = min_angle
         return yaw_angle
 
     def cali_pointer(self, cam):
