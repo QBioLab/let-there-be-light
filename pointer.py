@@ -35,7 +35,7 @@ class Pointer(gimbal):
         # gimbal at horizon is 0 degree, then pitch axis walk in 90+-50 degree
         max_angle = 140
         min_angle = 40
-        central_angle = 90
+        central_angle = 70
         # 取余角
         pitch_angle = 90 - np.arctan2(np.sign(x)*np.sqrt(x**2 + y**2), self.height)/np.pi*180
         if pitch_angle > max_angle or pitch_angle < min_angle :
