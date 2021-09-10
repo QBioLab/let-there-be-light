@@ -1,16 +1,17 @@
     {
-        "cam_idx": 6,
-        "roi_x0": 100,
-        "roi_x1": 435,
-        "roi_y0": 95,
-        "roi_y1": 425,
+        "cage_id": 4,
+        "cam_idx": 2,
+        "roi_x0": 49,
+        "roi_x1": 419,
+        "roi_y0": 72,
+        "roi_y1": 442,
         "gimbal_enable": true,
-        "gimbal_path": "/dev/ttyUSB3",
+        "gimbal_path": "/dev/ttyGIMBAL4",
         "gimbal_pos_x0": 95,
         "gimbal_pos_y0": 15,
         "gimbal_half_width": 185.0,
-        "gimbal_mm_height": 200,
+        "gimbal_height_in_mm": 200,
         "log_dir": "/datahub/hardware/let-there-be-light/log",
-	"yaw_bias": -200,
-	"erode1": 6
+        "yaw_bias": -4.395,
+        "erode1": 6
     }

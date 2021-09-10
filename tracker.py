@@ -1,3 +1,4 @@
+import os
 import time
 import cv2 as cv
 import numpy as np
@@ -32,9 +33,9 @@ class MouseTracker:
         self.camera.set(cv.CAP_PROP_FOURCC, fourcc)
         # initialize video recorder
         self.save_moive = False
+        self.save_fps = 5
         self.save_dir = "/dev/null"
-        self.roi = roi  #[x0, x1, y0, y1]
-                #result = open(self.save_dir+'/centroid-'+str(idx)+record_time+'.csv', 'w')
+        self.roi = roi  #[y0, y1, x0, x1]
         self.erode1 = 5
         self.centroid_y = self.centroid_x = 0
         self.last_centroid_y = self.last_centroid_x = 0
@@ -154,19 +155,24 @@ class MouseTracker:
             return MOVE, [self.centroid_x, self.centroid_y], centroid_result
         return IGNO, None, centroid_result
 
-    def set_data_dir(self, dir):
+    def set_data_dir(self, directory):
         record_time = time.strftime("%Y%m%d-%H%M", time.localtime())
         self.save_moive = True
-        self.save_dir = dir
+        self.save_dir = directory
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
         width = self.roi[1] - self.roi[0]
         height = self.roi[3] - self.roi[2]
+        self.check_dir(directory)
         self.out = cv.VideoWriter(self.save_dir+"/record-"+str(self.camera_addr)\
-            +"-"+record_time+".avi", fourcc, 1, (width, height))
+            +"-"+record_time+".mkv", fourcc, self.save_fps, (width, height))
+
+    def check_dir(self, directory):
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
     def save_data(self, image):
         """save image and centroid to file in period"""
-        if self.save_moive and time.time()-self.last_time > 60: # save image every 1min
+        if self.save_moive and time.time()-self.last_time > 1/self.save_fps: 
             self.last_time = time.time()
             #self.out.write(cv.cvtColor(image, cv.COLOR_RGB2BGR))
             self.out.write(image)
