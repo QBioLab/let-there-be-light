@@ -28,11 +28,16 @@
      <height>541</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>URW Gothic</family>
+    </font>
+   </property>
    <property name="html">
     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'URW Gothic'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Noto Sans'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="markdown" stdset="0">
@@ -60,6 +65,10 @@ p, li { white-space: pre-wrap; }
       <property name="toolTip">
        <string>Click this button to start tracking process</string>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 25pt &quot;URW Bookman&quot;;
+font: 87 28pt &quot;Noto Serif CJK SC&quot;;</string>
+      </property>
       <property name="text">
        <string>Start 启动</string>
       </property>
@@ -75,6 +84,9 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="toolTip">
        <string>Click this botton to kill tracking process</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 75 28pt &quot;Noto Serif CJK SC&quot;;</string>
       </property>
       <property name="text">
        <string>Stop 中止</string>
@@ -95,8 +107,23 @@ p, li { white-space: pre-wrap; }
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QCheckBox" name="schedulerON">
+      <property name="baseSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 20pt &quot;URW Gothic&quot;;</string>
+      </property>
       <property name="text">
        <string>Timer</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
       </property>
       <property name="checked">
        <bool>true</bool>
@@ -110,6 +137,12 @@ p, li { white-space: pre-wrap; }
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>URW Gothic</family>
+        <pointsize>20</pointsize>
+       </font>
       </property>
       <property name="tabletTracking">
        <bool>true</bool>
@@ -140,6 +173,12 @@ p, li { white-space: pre-wrap; }
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <family>URW Gothic</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <property name="dateTime">
        <datetime>
         <hour>20</hour>
@@ -166,8 +205,14 @@ p, li { white-space: pre-wrap; }
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QRadioButton" name="boxButton_1">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 24pt &quot;URW Gothic&quot;;</string>
+      </property>
       <property name="text">
-       <string>Box 1</string>
+       <string>Cage 1</string>
       </property>
       <property name="checked">
        <bool>true</bool>
@@ -176,15 +221,21 @@ p, li { white-space: pre-wrap; }
     </item>
     <item>
      <widget class="QRadioButton" name="boxButton_2">
+      <property name="styleSheet">
+       <string notr="true">font: 63 24pt &quot;URW Gothic&quot;;</string>
+      </property>
       <property name="text">
-       <string>Box 2</string>
+       <string>Cage 2</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QRadioButton" name="boxButton_3">
+      <property name="styleSheet">
+       <string notr="true">font: 63 24pt &quot;URW Gothic&quot;;</string>
+      </property>
       <property name="text">
-       <string>Box 3</string>
+       <string>Cage 3</string>
       </property>
      </widget>
     </item>
@@ -196,8 +247,11 @@ p, li { white-space: pre-wrap; }
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 63 24pt &quot;URW Gothic&quot;;</string>
+      </property>
       <property name="text">
-       <string>Box 4</string>
+       <string>Cage 4</string>
       </property>
       <property name="iconSize">
        <size>
@@ -226,7 +280,9 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="font">
     <font>
-     <family>Serif</family>
+     <family>URW Bookman</family>
+     <pointsize>40</pointsize>
+     <italic>true</italic>
     </font>
    </property>
    <property name="text">
@@ -244,6 +300,9 @@ p, li { white-space: pre-wrap; }
      <width>171</width>
      <height>81</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 20pt &quot;URW Gothic&quot;;</string>
    </property>
    <property name="text">
     <string>Exit</string>
