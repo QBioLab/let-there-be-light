@@ -25,6 +25,8 @@ TODO: send command to power supply then release and return.
 
 Build GUI in QT. 
 
+
+Reference:
 - [PyQtGraph library](https://github.com/pyqtgraph/pyqtgraph)
 - [Assign fixed usb port name](https://www.freva.com/2019/06/20/assign-fixed-usb-port-names-to-your-raspberry-pi/)
 - [How to bind v4l2 USB cameras to the same device names even after reboot?](https://unix.stackexchange.com/questions/77170/how-to-bind-v4l2-usb-cameras-to-the-same-device-names-even-after-reboot)
@@ -37,9 +39,20 @@ Build GUI in QT.
 ## Gimbal design and setting 云台设计
 Before run SimpleBGC in khadas, please install `librxtx-java`
 
+calibration design
+
+
+## Tracker Design
+Color and movement
 
 ## ISSUSE & TODO 现存问题
-1. Yaw drift: Auto find gimbal yaw and pitch origin using camera
++ Yaw drift: Auto find gimbal yaw and pitch origin using camera
++ offline test: gimbal rotate in preload sequence and saved video
++ add laser power switch in GUI
++ Enlarge buttom and text for touch screen
++ 微弱信号识别及过滤干扰目标: detect moving region
++ 固定曝光？
++ send poweroff command to motor after closing  
 
 ## Ref 参考
 https://superuser.com/questions/497933/50-usb-webcams-in-a-single-computer-is-that-really-possible

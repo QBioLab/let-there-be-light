@@ -28,6 +28,8 @@ class MouseTracker:
         self.camera.set(cv.CAP_PROP_FRAME_WIDTH, 640)
         self.camera.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
         self.camera.set(cv.CAP_PROP_FPS, 25)
+        self.camera.set(cv.CAP_PROP_AUTO_EXPOSURE, 1) # 1 for manual mode
+        self.camera.set(cv.CAP_PROP_EXPOSURE, 100)
         #cam.set(cv.CAP_PROP_AUTO_WB, 0)
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
         self.camera.set(cv.CAP_PROP_FOURCC, fourcc)
