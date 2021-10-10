@@ -11,7 +11,7 @@
         "gimbal_pos_y0": 0,
         "gimbal_half_width": 185,
         "gimbal_height_in_mm": 210,
-	    "log_dir": "/datahub/let-there-be-light/log",
-	"   yaw_bias": 2.2972,
-	"   erode1": 5
+	"log_dir": "/datahub/hardware/let-there-be-light/log",
+	"yaw_bias": 0.10972,
+	"erode1": 6
     }

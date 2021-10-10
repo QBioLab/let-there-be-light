@@ -13,5 +13,5 @@
         "gimbal_height_in_mm": 220,
         "log_dir": "/datahub/hardware/let-there-be-light/log",
 	    "yaw_bias": 0,
-        "erode1": 5
+        "erode1": 7
     }
