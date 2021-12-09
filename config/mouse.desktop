@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=mouse
+Name=Mouse
 Comment=GUI for tracking mouse 
 Exec=/home/khadas/let-there-be-light/run.sh
 Icon=

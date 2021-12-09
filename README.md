@@ -41,9 +41,26 @@ Before run SimpleBGC in khadas, please install `librxtx-java`
 
 calibration design
 
+```
+|--------------------------|
+| Camera & Gimbal Geometry |
+|--------------------------|
+|  O----> x                |
+|  |                       |
+| \|/     |--------|       |
+|  y      | CAMERA |       |
+|         |--------|       |
+|                          |
+|         |--------|  0    |
+|         | GIMBAL | /|\   |
+|         |--------|  |    |
+|             -90<---+yaw  |
+|--------------------------|
+```
 
 ## Tracker Design
 Color and movement
+
 
 ## ISSUSE & TODO 现存问题
 + Yaw drift: Auto find gimbal yaw and pitch origin using camera

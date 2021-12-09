@@ -23,7 +23,7 @@ MOVE = 1 # apply track
 PARK = 2 # park pointer
 LOST = 3 # lost mouse
 IGNO = 4 # ignore tracking result
-
+ 
 # default configure value
 cage_id = 1
 cam_idx = 0
@@ -120,6 +120,8 @@ if __name__=='__main__':
                             receiver.send( image )
                         elif message[0] == 'close':
                             finder.close()
+                            if config['gimbal_enable']:
+                                light.park_gimbal()
                             break
                         elif message[0] == 'pause':
                             print("stop gimbal, but keep camera open")

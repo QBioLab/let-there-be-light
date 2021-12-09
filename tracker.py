@@ -92,6 +92,7 @@ class MouseTracker:
         ret, frame = self.camera.read()
         if not ret:
             return FAIL, None, None
+        #[y0:y1, x0:x1]
         procession = frame[self.roi[0]: self.roi[1], self.roi[2]: self.roi[3]]
         self.save_data(procession)
 
@@ -102,8 +103,6 @@ class MouseTracker:
             self.count = self.count + 1
             print('mask = None', self.count)
             if self.count >= 500:
-                #self.gimbal.rotate_gimbal(4096, 0)
-                time.sleep(0)
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -114,7 +113,6 @@ class MouseTracker:
             self.count = self.count + 1
             print('morphology = None', self.count)
             if self.count >= 500:
-                #self.gimbal.rotate_gimbal(4096, 0)
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -126,7 +124,6 @@ class MouseTracker:
             self.count = self.count + 1
             print('contour = None', self.count)
             if self.count >= 500:
-                #self.gimbal.rotate_gimbal(4096, 0)
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -137,12 +134,11 @@ class MouseTracker:
             self.count = self.count + 1
             print('contour = Open', self.count)
             if self.count >= 500:
-                #self.gimbal.rotate_gimbal(4096, 0)
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
-        self.centroid_x = round(moment['m10'] / moment['m00'])
-        self.centroid_y = round(moment['m01'] / moment['m00'])
+        self.centroid_x = round(moment['m10'] / moment['m00'])  
+        self.centroid_y = round(moment['m01'] / moment['m00']) 
 
         #畫跟蹤點
         self.count = 0
@@ -154,7 +150,10 @@ class MouseTracker:
         if dist_movement > 0:
             self.last_centroid_x = self.centroid_x
             self.last_centroid_y = self.centroid_y
-            return MOVE, [self.centroid_x, self.centroid_y], centroid_result
+            return MOVE, [self.centroid_x + self.roi[2], 
+                self.centroid_y + self.roi[0]], centroid_result
+            #print(self.centroid_x, self.centroid_y)
+            #return MOVE, [self.centroid_x, self.centroid_y], centroid_result
         return IGNO, None, centroid_result
 
     def set_data_dir(self, directory):
@@ -162,8 +161,8 @@ class MouseTracker:
         self.save_moive = True
         self.save_dir = directory
         fourcc = cv.VideoWriter_fourcc(*"MJPG")
-        width = self.roi[1] - self.roi[0]
-        height = self.roi[3] - self.roi[2]
+        height = self.roi[1] - self.roi[0]
+        width = self.roi[3] - self.roi[2]
         self.check_dir(directory)
         self.out = cv.VideoWriter(self.save_dir+"/record-"+str(self.camera_addr)\
             +"-"+record_time+".mkv", fourcc, self.save_fps, (width, height))
