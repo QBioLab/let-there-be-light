@@ -1,5 +1,4 @@
 import time
-#import dp832
 import DPS832
 
 dp1 = DPS832.DP832("USB0::6833::3601::DP8C230600574::0::INSTR")
@@ -10,17 +9,17 @@ dp2 = DPS832.DP832("USB0::6833::3601::DP8C211000635::0::INSTR")
 illumination = "On"
 
 def on():
-    dp1.toggle_output(1, 1)
     dp1.toggle_output(2, 1)
     dp1.toggle_output(3, 1)
     dp2.toggle_output(1, 1)
+    dp2.toggle_output(2, 1)
     dp2.toggle_output(3, 1)
 
 def off():
-    dp1.toggle_output(1, 0)
     dp1.toggle_output(2, 0)
     dp1.toggle_output(3, 0)
     dp2.toggle_output(1, 0)
+    dp2.toggle_output(2, 0)
     dp2.toggle_output(3, 0)
 
 
@@ -33,27 +32,11 @@ if __name__ == '__main__':
             #print(illumination)
             print("Turn on at", now)
             on()
-            """
-            dp1.toggle_output(1, 1)
-            dp1.toggle_output(2, 1)
-            dp1.toggle_output(3, 1)
-            dp2.toggle_output(1, 1)
-            dp2.toggle_output(3, 1)
-            """
 
 
         if now == "20:00" and illumination == "On":
             illumination = "Off"
-            #dp1.AllOff()
-            #dp2.AllOff()
             off()
-            """
-            dp1.toggle_output(1, 0)
-            dp1.toggle_output(2, 0)
-            dp1.toggle_output(3, 0)
-            dp2.toggle_output(1, 0)
-            dp2.toggle_output(3, 0)
-            """
             print("Turn off at", now)
 
         time.sleep(1)# refresh time 1s
