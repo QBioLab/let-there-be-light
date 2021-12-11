@@ -102,7 +102,7 @@ class MouseTracker:
         if np.all(mask == 0):
             self.count = self.count + 1
             print('mask = None', self.count)
-            if self.count >= 500:
+            if self.count >= 5000:
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -112,7 +112,7 @@ class MouseTracker:
         if np.all(morphology == 0):
             self.count = self.count + 1
             print('morphology = None', self.count)
-            if self.count >= 500:
+            if self.count >= 5000:
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -123,7 +123,7 @@ class MouseTracker:
         if len(contour) == 0:
             self.count = self.count + 1
             print('contour = None', self.count)
-            if self.count >= 500:
+            if self.count >= 5000:
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
@@ -133,7 +133,7 @@ class MouseTracker:
         if moment['m00'] == 0:
             self.count = self.count + 1
             print('contour = Open', self.count)
-            if self.count >= 500:
+            if self.count >= 5000:
                 self.count = 0
                 return PARK, None, procession
             return LOST, None, procession
