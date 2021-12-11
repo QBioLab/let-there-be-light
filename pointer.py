@@ -56,8 +56,8 @@ class Pointer(gimbal):
         # yaw axis walk from -90 to +90 degree
         max_angle = 100 
         min_angle = -100
-        if not x == 0: # avoid to divide 0
-            x = x + 0.00001
+        if x == 0: # avoid to divide 0
+            x = x + 0.1
         yaw_angle = np.arctan(y/x) / np.pi*180 
         yaw_angle = yaw_angle + self.yaw_bias_in_degree
         if yaw_angle > max_angle :
