@@ -58,18 +58,18 @@ calibration design
 |--------------------------|
 ```
 
+
+
 ## Tracker Design
 Color and movement
 
 
 ## ISSUSE & TODO 现存问题
-+ Yaw drift: Auto find gimbal yaw and pitch origin using camera
 + offline test: gimbal rotate in preload sequence and saved video
 + add laser power switch in GUI
-+ Enlarge buttom and text for touch screen
 + 微弱信号识别及过滤干扰目标: detect moving region
-+ 固定曝光？
 + send poweroff command to motor after closing  
++ add force exit function, such as reboot?
 
 ## Ref 参考
 https://superuser.com/questions/497933/50-usb-webcams-in-a-single-computer-is-that-really-possible
