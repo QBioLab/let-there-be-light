@@ -13,7 +13,7 @@ by add `usbtmc` and `i2c_mux_pca954x` to `/etc/modules-load.d/modules.conf`.
 Only one USB bus is exported in VIM3, I try to use orignal M.2 port as PCI-e
 port. I install ADT-Link's [M.2 NVMe to PCIe X1 extender](http://www.adtlink.cn/en/product/R41.html)
 on Khadas M.2 extender board, then a PCIe Card(VIA VL805). The PCIe card is
-power by sperated 5V instead of on-board 5V. But system only reconginze this
+power by sperated 5V. But system only reconginze this
 card as USB2 bus. Why? May I also feed 12v pin. Once I mount USB3 device,
 system will reboot. 
 
@@ -34,7 +34,7 @@ Reference:
 - [WiringPi-Python on VIM](https://docs.khadas.com/zh-cn/vim3/HowToUseWiringPi-Python.html)
 - [Change Logo](https://docs.khadas.com/zh-cn/vim3/HowToChangeBootLogo.html)
 - [Autostart login tty1 and execute command](https://unix.stackexchange.com/questions/44288/run-gui-application-on-startup)
-
+- [renesas-UPD720201-usb3](https://pipci.jeffgeerling.com/cards_usb/renesas-UPD720201-usb3-6amlifestyle.html)
 
 ## Gimbal design and setting 云台设计
 Before run SimpleBGC in khadas, please install `librxtx-java`
@@ -57,6 +57,8 @@ calibration design
 |                0<---+yaw |
 |--------------------------|
 ```
+
+coordintiona transformation.
 
 ## Tracker Design
 Color and movement

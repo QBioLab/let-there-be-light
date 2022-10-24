@@ -1,5 +1,5 @@
     {
-        "cage_id": 3,
+        "cage_id": 2,
         "cam_idx": 0,
         "roi_x0": 220,
         "roi_x1": 590,
@@ -10,8 +10,7 @@
         "gimbal_pos_x0": 490,
         "gimbal_pos_y0": 250,
         "gimbal_half_width": 185.0,
-        "gimbal_height_in_mm": 220,
+        "gimbal_height_in_mm": 200,
         "log_dir": "/datahub/hardware/let-there-be-light/log",
-	    "yaw_bias": 2,
-        "erode1": 7
-    }
+	    "yaw_bias": 0,
+        "erode1": 5    }

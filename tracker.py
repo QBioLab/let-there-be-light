@@ -104,7 +104,7 @@ class MouseTracker:
             print('mask = None', self.count)
             if self.count >= 5000:
                 self.count = 0
-                return PARK, None, procession
+                #return PARK, None, procession
             return LOST, None, procession
 
         #形态学处理
@@ -114,7 +114,7 @@ class MouseTracker:
             print('morphology = None', self.count)
             if self.count >= 5000:
                 self.count = 0
-                return PARK, None, procession
+                #return PARK, None, procession
             return LOST, None, procession
 
         #画轮廓
@@ -125,7 +125,7 @@ class MouseTracker:
             print('contour = None', self.count)
             if self.count >= 5000:
                 self.count = 0
-                return PARK, None, procession
+                #return PARK, None, procession
             return LOST, None, procession
 
         #找质心
@@ -135,7 +135,7 @@ class MouseTracker:
             print('contour = Open', self.count)
             if self.count >= 5000:
                 self.count = 0
-                return PARK, None, procession
+                #return PARK, None, procession
             return LOST, None, procession
         self.centroid_x = round(moment['m10'] / moment['m00'])  
         self.centroid_y = round(moment['m01'] / moment['m00']) 
